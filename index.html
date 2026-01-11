@@ -2,118 +2,31 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>트위터 2차 지인 확인 서비스</title>
+    <title>트위터 2차 지인 확인</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
-        body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f5f8fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
+        body { font-family: sans-serif; text-align: center; padding-top: 100px; background: #f5f8fa; }
+        .btn { 
+            display: inline-block; padding: 20px 40px; background: #1da1f2; color: white; 
+            text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: grab;
         }
-        .container {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-        }
-        h1 { color: #1da1f2; font-size: 1.8rem; margin-bottom: 10px; }
-        p { color: #657786; line-height: 1.6; margin-bottom: 30px; }
-        
-        /* 북마크릿 버튼 스타일 */
-        .bookmarklet-btn {
-            display: inline-block;
-            background-color: #1da1f2;
-            color: white;
-            padding: 18px 32px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 15px rgba(29, 161, 242, 0.3);
-            cursor: grab;
-            transition: transform 0.2s, background-color 0.2s;
-        }
-        .bookmarklet-btn:hover {
-            background-color: #1a91da;
-            transform: translateY(-2px);
-        }
-        .bookmarklet-btn:active { cursor: grabbing; }
-
-        .guide-box {
-            margin-top: 40px;
-            text-align: left;
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-        }
-        .guide-box h3 { margin-top: 0; font-size: 1rem; color: #14171a; }
-        ol { padding-left: 20px; color: #657786; }
-        li { margin-bottom: 8px; }
-        .highlight { color: #1da1f2; font-weight: bold; }
     </style>
 </head>
 <body>
+    <h1>🔍 지인 대조기</h1>
+    <p>아래 버튼을 북마크바(즐겨찾기)로 드래그하세요.</p>
 
-    <div class="container">
-        <h1>🔍 지인 대조기</h1>
-        <p>3명의 타겟 유저와 당신 사이의<br>공통 지인을 버튼 하나로 찾아보세요.</p>
-
-        <a id="bookmarklet" class="bookmarklet-btn" href="#">버튼을 북마크바로 드래그</a>
-
-        <div class="guide-box">
-            <h3>사용 방법</h3>
-            <ol>
-                <li>위 파란 버튼을 마우스로 잡아 <span class="highlight">북마크바(즐겨찾기 목록)</span>로 드래그합니다.</li>
-                <li>확인하고 싶은 <span class="highlight">트위터 팔로잉 목록</span> 페이지로 이동합니다.</li>
-                <li>목록을 아래로 <span class="highlight">충분히 스크롤</span>한 뒤, 저장한 북마크를 클릭합니다.</li>
-            </ol>
-        </div>
-    </div>
+    <a id="bookmarklet" class="btn" href="">2차 지인 확인하기</a>
 
     <script>
-        /**
-         * 1. 님의 실제 GitHub Pages 주소 설정
-         * 사용자님이 주신 정보를 바탕으로 세팅되었습니다.
-         */
-        const resultPageUrl = "https://letsSealtime.github.io/followercheck/result.html";
+        // 주소를 미리 선언
+        const targetUrl = "https://letsSealtime.github.io/followercheck/result.html";
 
-        /**
-         * 2. 북마크릿 코드 본체
-         * SyntaxError 방지를 위해 템플릿 리터럴로 작성 후 버튼에 주입합니다.
-         */
-        const bookmarkletCode = `javascript:(function(){
-            const cells = document.querySelectorAll('[data-testid="UserCell"]');
-            const followingIds = [];
-            cells.forEach(cell => {
-                const link = cell.querySelector('a[href^="/"][role="link"]');
-                if (link) {
-                    const id = link.getAttribute('href').replace('/', '');
-                    if (!['home', 'explore', 'notifications', 'messages', 'settings'].includes(id.toLowerCase())) {
-                        followingIds.push(id);
-                    }
-                }
-            });
+        // 북마크릿 코드를 한 줄의 문자열로 정의 (불필요한 공백/줄바꿈 완전 제거)
+        const code = "javascript:(function(){var u=[];document.querySelectorAll('[data-testid=\"UserCell\"]').forEach(function(c){var l=c.querySelector('a[href^=\"/\"][role=\"link\"]');if(l){var h=l.getAttribute('href').replace('/','');if(['home','explore','notifications','messages','settings'].indexOf(h.toLowerCase())===-1){u.push(h)}}});if(u.length===0){alert('목록을 찾지 못했습니다.');}else{location.href='" + targetUrl + "?following='+encodeURIComponent(u.join(','));}})();";
 
-            if (followingIds.length === 0) {
-                alert('팔로잉 목록을 찾지 못했습니다. 트위터 팔로잉 페이지가 맞는지 확인하시고 스크롤을 내려주세요!');
-            } else {
-                if(confirm(followingIds.length + '명의 지인을 찾았습니다. 대조 페이지로 이동할까요?')) {
-                    location.href = '${resultPageUrl}?following=' + encodeURIComponent(followingIds.join(','));
-                }
-            }
-        })();`.replace(/\s+/g, ' '); // 공백 제거하여 한 줄로 압축
-
-        // 버튼에 코드 주입
-        document.getElementById('bookmarklet').href = bookmarkletCode;
+        // 버튼에 주입
+        document.getElementById('bookmarklet').href = code;
     </script>
 </body>
 </html>
