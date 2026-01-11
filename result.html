@@ -76,9 +76,16 @@
     </div>
 
     <script>
-        // --- 실제 데이터 적용 ---
-        const targetData = {
-            "여신": ["rihodubo", "tenebe11ae", "RA_NR_AN_KO", "delthepenguin", "angerisgiift", 
+     // 1. 주최진 실제 아이디 설정 (1차 지인 판정용)
+const admins = {
+    "여신": "Unknown_B0X",   
+    "개돌": "time2ReachOut",    
+    "라떼": "bie0620"        
+};
+
+// 2. 주최진별 팔로워 배열 데이터
+const targetData = {
+    "여신": ["rihodubo", "tenebe11ae", "RA_NR_AN_KO", "delthepenguin", "angerisgiift", 
   "720715_1", "666_bbi", "666_KBJ", "acnh_ffenguin", "zjab_som", 
   "_somgam_", "samat_oo", "J2NJiN", "calyxkoibito", "withcalyx", 
   "byoribab", "Cyphers_Amari", "bing__g0", "gomsleep", "_chobby", 
@@ -151,33 +158,50 @@
   "mysticlemon", "duckk_7777", "zdc1224", "D_JES_0311", "sayhoney22", "BoZaWCGTtAiXysH", "alsxm43", "thegreatkogi", "hinol05", "hanshidayo", 
   "yurikkokko", "MAESAENG__E", "dhkd0817"
 ]
-        };
+};
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            const following = params.get('following');
-            const container = document.getElementById('result-container');
+document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const following = params.get('following');
+    const container = document.getElementById('result-container');
 
-            if (!following) {
-                container.innerHTML = "<p class='no-match'>대조할 팔로워 데이터가 없습니다.</p>";
-                return;
-            }
+    if (!following) {
+        container.innerHTML = "<p class='no-match'>대조할 팔로워 데이터가 없습니다.</p>";
+        return;
+    }
 
-            const visitorSet = new Set(following.split(','));
-            let html = "";
+    const visitorSet = new Set(following.split(','));
+    let html = "";
 
-            for (const [name, list] of Object.entries(targetData)) {
-                const matches = list.filter(id => visitorSet.has(id));
-                html += `<div class="card"><h3>${name}님과의 공통 지인</h3><ul class="match-list">`;
-                if (matches.length > 0) {
-                    matches.forEach(id => html += `<li>@${id}</li>`);
-                } else {
-                    html += `<li class="no-match">찾은 공통 지인이 없습니다.</li>`;
-                }
-                html += `</ul></div>`;
-            }
-            container.innerHTML = html;
-        });
+    for (const [name, adminId] of Object.entries(admins)) {
+        // 해당 주최진과의 1차 지인 여부 확인
+        const isFirstDegree = visitorSet.has(adminId);
+        
+        // 겹지인(2차 지인) 리스트 추출
+        const followerList = targetData[name] || [];
+        const matches = followerList.filter(id => visitorSet.has(id));
+
+        html += `<div class="card">`;
+        
+        // 제목 옆에 1차 지인인 경우 문구 추가
+        if (isFirstDegree) {
+            html += `<h3>${name}님과 <span style="color: #ff4d6d;">1차 지인입니다</span></h3>`;
+        } else {
+            html += `<h3>${name}님과의 대조 결과</h3>`;
+        }
+        
+        html += `<ul class="match-list">`;
+        if (matches.length > 0) {
+            matches.forEach(id => html += `<li>@${id}</li>`);
+        } else {
+            html += `<li class="no-match">찾은 겹지인이 없습니다.</li>`;
+        }
+        html += `</ul></div>`;
+    }
+    container.innerHTML = html;
+});
+
+
     </script>
 </body>
 </html>
