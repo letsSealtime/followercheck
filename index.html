@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>트위터 2차 지인 확인 서비스</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap');
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            text-align: center;
+            box-sizing: border-box;
+            margin: 20px;
+        }
+        h1 {
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-bottom: 25px;
+            font-size: 2.2em;
+        }
+        p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        .instruction-box {
+            background-color: #e6f7ff;
+            border: 1px solid #91d5ff;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        .instruction-box h2 {
+            color: #096dd9;
+            font-size: 1.5em;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .instruction-box ol {
+            padding-left: 25px;
+            margin: 0;
+        }
+        .instruction-box li {
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+        .bookmarklet-button {
+            display: inline-block;
+            background-color: #1DA1F2; /* Twitter Blue */
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.3em;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            cursor: grab; /* 드래그 가능한 커서 */
+        }
+        .bookmarklet-button:hover {
+            background-color: #1793e6;
+            transform: translateY(-2px);
+        }
+        .warning {
+            color: #d84315;
+            font-weight: 500;
+            margin-top: 25px;
+            font-size: 0.95em;
+        }
+        footer {
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #777;
+        }
+        .highlight {
+            font-weight: 700;
+            color: #1DA1F2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 트위터 2차 지인 확인 서비스</h1>
+        <p>
+            저와 연결된 지인들, 그리고 당신이 팔로우하는 계정들 중에서 <br class="pc-only">
+            <span class="highlight">특정 3명의 유저와 공통으로 팔로우하는 2차 지인</span>을 찾아드립니다.
+        </p>
+        <p>
+            **주의:** 본 서비스는 트위터 공식 API를 사용하지 않으므로, <br class="pc-only">
+            아래 안내에 따라 **북마크릿**을 사용해야 합니다.
+        </p>
+
+        <div class="instruction-box">
+            <h2>사용 방법 (딱 3단계!)</h2>
+            <ol>
+                <li>
+                    먼저, 아래 <span class="highlight">"클릭해서 2차 지인 확인" 버튼을 마우스로 잡고</span> <br class="pc-only">
+                    브라우저의 <span class="highlight">북마크바(즐겨찾기 막대)로 드래그</span>하여 등록해주세요.
+                </li>
+                <li>
+                    새 탭을 열고, <a href="https://twitter.com/i/user_following" target="_blank" class="highlight">**당신의 트위터 팔로잉 목록 페이지**</a>로 이동합니다. <br>
+                    (⚠️ 팔로워가 많다면, 페이지 하단까지 <span class="highlight">충분히 스크롤하여 모든 목록을 로딩</span>시켜 주세요!)
+                </li>
+                <li>
+                    트위터 팔로잉 목록 페이지에서, 방금 등록한 <span class="highlight">북마크릿 버튼을 클릭</span>하세요! <br>
+                    자동으로 이 페이지로 돌아와 결과를 보여줍니다.
+                </li>
+            </ol>
+        </div>
+
+        <a href="javascript:(function() {
+            const userCells = document.querySelectorAll('[data-testid=\u0022UserCell\u0022]');
+            const users = [];
+            userCells.forEach(cell => {
+                const link = cell.querySelector('a[href^\u0022/\u0022][role=\u0022link\u0022]');
+                if (link) {
+                    const handle = link.getAttribute('href').replace('/', '');
+                    if(!['home', 'explore', 'notifications', 'messages'].includes(handle)) {
+                        users.push(handle);
+                    }
+                }
+            });
+
+            if (users.length === 0) {
+                alert('팔로잉 목록이 로딩되지 않았습니다. 스크롤을 조금 내린 후 다시 시도해주세요!');
+                return;
+            }
+
+            const baseUrl = 'https://[letsSealtime].github.io/[followercheck]/result.html'; // <<< 이곳을 수정하세요!
+            const data = encodeURIComponent(users.join(','));
+            window.location.href = `${baseUrl}?following=${data}`;
+        })();" class="bookmarklet-button" draggable="true">클릭해서 2차 지인 확인 버튼을 드래그하세요!</a>
+
+        <p class="warning">
+            **개인 정보 보호 안내:** 이 서비스는 당신의 트위터 계정 정보를 저장하거나 서버로 전송하지 않습니다. <br>
+            모든 비교 작업은 당신의 브라우저에서 이루어집니다.
+        </p>
+        <footer>
+            &copy; 2023 2차 지인 확인 서비스. All rights reserved.
+        </footer>
+    </div>
+</body>
+</html>
