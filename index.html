@@ -2,30 +2,44 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>트위터 2차 지인 확인</title>
+    <title>트위터 팔로워 대조기</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding-top: 100px; background: #f5f8fa; }
+        body { font-family: sans-serif; text-align: center; padding-top: 80px; background: #f5f8fa; line-height: 1.6; }
+        .container { background: white; padding: 40px; display: inline-block; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); max-width: 500px; }
+        h1 { color: #1da1f2; margin-bottom: 10px; }
         .btn { 
-            display: inline-block; padding: 20px 40px; background: #1da1f2; color: white; 
-            text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 1.2rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); cursor: grab;
+            display: inline-block; padding: 18px 35px; background: #1da1f2; color: white; 
+            text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 1.1rem;
+            margin: 25px 0; box-shadow: 0 4px 15px rgba(29, 161, 242, 0.3); cursor: grab;
         }
+        .guide { text-align: left; background: #f8f9fa; padding: 20px; border-radius: 12px; font-size: 0.9rem; color: #555; }
+        .highlight { color: #1da1f2; font-weight: bold; }
     </style>
 </head>
 <body>
-    <h1>🔍 지인 대조기</h1>
-    <p>아래 버튼을 북마크바(즐겨찾기)로 드래그하세요.</p>
+    <div class="container">
+        <h1>👥 팔로워 대조기</h1>
+        <p>나를 팔로우하는 사람들 중<br>공통 지인이 있는지 확인합니다.</p>
 
-    <a id="bookmarklet" class="btn" href="">2차 지인 확인하기</a>
+        <a id="bookmarklet" class="btn" href="">이 버튼을 북마크바로 드래그</a>
+
+        <div class="guide">
+            <strong>사용 순서:</strong>
+            <ol>
+                <li>위 버튼을 <span class="highlight">북마크바</span>로 드래그하여 저장합니다.</li>
+                <li>트위터 <span class="highlight">내 팔로워 목록</span> 페이지로 이동합니다.</li>
+                <li>스크롤을 끝까지 내려 목록을 로딩한 후, 북마크를 클릭하세요!</li>
+            </ol>
+        </div>
+    </div>
 
     <script>
-        // 주소를 미리 선언
+        // 결과 페이지 주소
         const targetUrl = "https://letsSealtime.github.io/followercheck/result.html";
 
-        // 북마크릿 코드를 한 줄의 문자열로 정의 (불필요한 공백/줄바꿈 완전 제거)
-        const code = "javascript:(function(){var u=[];document.querySelectorAll('[data-testid=\"UserCell\"]').forEach(function(c){var l=c.querySelector('a[href^=\"/\"][role=\"link\"]');if(l){var h=l.getAttribute('href').replace('/','');if(['home','explore','notifications','messages','settings'].indexOf(h.toLowerCase())===-1){u.push(h)}}});if(u.length===0){alert('목록을 찾지 못했습니다.');}else{location.href='" + targetUrl + "?following='+encodeURIComponent(u.join(','));}})();";
+        // 북마크릿 코드 (팔로워/팔로잉 페이지 모두에서 UserCell을 찾아 아이디를 추출함)
+        const code = "javascript:(function(){var u=[];document.querySelectorAll('[data-testid=\"UserCell\"]').forEach(function(c){var l=c.querySelector('a[href^=\"/\"][role=\"link\"]');if(l){var h=l.getAttribute('href').replace('/','');if(['home','explore','notifications','messages','settings'].indexOf(h.toLowerCase())===-1){u.push(h)}}});if(u.length===0){alert('팔로워 목록을 찾지 못했습니다. 페이지를 확인해주세요!');}else{if(confirm(u.length+'명의 목록을 가져왔습니다. 대조하시겠습니까?')){location.href='" + targetUrl + "?following='+encodeURIComponent(u.join(','));}}})();";
 
-        // 버튼에 주입
         document.getElementById('bookmarklet').href = code;
     </script>
 </body>
