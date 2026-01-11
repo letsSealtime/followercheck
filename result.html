@@ -2,120 +2,99 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2차 지인 확인 결과</title>
+    <title>겹지인 대조 결과</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700&family=Noto+Sans+KR:wght@400;700&display=swap');
+        
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f2f5;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* 상단 정렬 */
-            min-height: 100vh;
+            background-color: #3d2b1f;
+            margin: 0; padding: 50px 0;
+            display: flex; justify-content: center;
         }
         .container {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
+            background: white;
+            padding: 50px;
+            border-radius: 30px;
+            max-width: 650px; width: 90%;
             text-align: center;
-            box-sizing: border-box;
-            margin: 40px 20px; /* 상하 여백 추가 */
+            border: 4px solid #ffb3c1;
         }
-        h1 {
-            color: #1a1a1a;
-            font-weight: 700;
-            margin-bottom: 25px;
-            font-size: 2.2em;
+        h1 { 
+            font-family: 'Noto Serif KR', serif; 
+            color: #800e13; margin-bottom: 40px; 
+            font-size: 2rem;
         }
         .card {
-            background-color: #f9f9f9;
-            border: 1px solid #eee;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 15px;
+            background-color: #fffcfd;
+            border: 1px solid #ffe5e9;
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 25px;
             text-align: left;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
         }
-        .card h3 {
-            color: #1DA1F2; /* Twitter Blue */
-            font-size: 1.6em;
-            margin-top: 0;
-            margin-bottom: 10px;
-            font-weight: 600;
+        .card::after {
+            content: '❤'; position: absolute; right: 15px; top: 15px;
+            color: #ffccd5; font-size: 1.5rem;
+        }
+        .card h3 { 
+            color: #800e13; margin-top: 0; 
+            border-bottom: 2px solid #ffccd5; padding-bottom: 12px;
+            font-size: 1.2rem;
         }
         .match-list {
-            list-style: none;
-            padding: 0;
-            margin: 10px 0 0;
-            display: flex;
-            flex-wrap: wrap; /* 여러 줄로 표시 */
-            gap: 8px; /* 항목 간 간격 */
+            list-style: none; padding: 0;
+            display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px;
         }
         .match-list li {
-            background-color: #e6f7ff;
-            color: #096dd9;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-weight: 500;
-            font-size: 0.95em;
-            word-break: break-all; /* 긴 아이디 처리 */
+            background: linear-gradient(to right, #ff4d6d, #c9184a);
+            color: white; padding: 8px 15px;
+            border-radius: 25px; font-size: 0.9rem; font-weight: bold;
+            box-shadow: 0 3px 8px rgba(201, 24, 74, 0.2);
         }
-        .no-match {
-            color: #555;
-            font-style: italic;
+        .no-match { color: #a08080; font-style: italic; font-size: 0.95rem; }
+        
+        .back-btn {
+            display: inline-block; margin-top: 30px;
+            text-decoration: none; color: #800e13;
+            font-weight: bold; border: 2px solid #800e13;
+            padding: 12px 30px; border-radius: 50px;
+            transition: 0.3s;
         }
-        .loading-message {
-            font-size: 1.2em;
-            color: #555;
-        }
-        .error-message {
-            color: #d84315;
-            font-weight: 500;
-            font-size: 1.1em;
-        }
-        footer {
-            margin-top: 30px;
-            font-size: 0.85em;
-            color: #777;
-        }
-        .back-button {
-            display: inline-block;
-            background-color: #6c757d; /* Gray */
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 500;
-            margin-top: 20px;
-            transition: background-color 0.3s ease;
-        }
-        .back-button:hover {
-            background-color: #5a6268;
-        }
+        .back-btn:hover { background: #800e13; color: white; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>✨ 2차 지인 확인 결과</h1>
-        <div id="result-container" class="loading-message">
-            데이터를 분석 중입니다... 잠시만 기다려주세요.
+        <h1>✨ 겹지인 대조 결과</h1>
+        <div id="result-container">
+            <p style="color:#5c2d35;">팔로워 분석 중입니다...</p>
         </div>
-        <a href="index.html" class="back-button">다시 확인하기</a>
-        <footer>
-            &copy; 2023 2차 지인 확인 서비스. All rights reserved.
-        </footer>
+        <a href="index.html" class="back-btn">처음으로 돌아가기</a>
     </div>
 
     <script>
-        // --- 님의 타겟 유저 데이터 (이곳을 수정하세요!) ---
+        // --- 실제 데이터 적용 ---
         const targetData = {
-            "time2ReachOut": [
+            "여신": ["rihodubo", "tenebe11ae", "RA_NR_AN_KO", "delthepenguin", "angerisgiift", 
+  "720715_1", "666_bbi", "666_KBJ", "acnh_ffenguin", "zjab_som", 
+  "_somgam_", "samat_oo", "J2NJiN", "calyxkoibito", "withcalyx", 
+  "byoribab", "Cyphers_Amari", "bing__g0", "gomsleep", "_chobby", 
+  "ff14_narae", "OoOr_UoU", "seole_14S2", "_cyphers_ghost", "wenan_na", 
+  "haengil248155", "KHGCIQ", "_______v_S", "Attractive15951", "cryplz_mylovers", 
+  "D_Che2411", "cyp_nemo", "Kk92Er", "lO_oi9", "Loving_Leonor", 
+  "rue__n", "Cyp_effect", "hohorizon", "LUVME_DE4R", "ssorryimstrong", 
+  "hazimalza", "DGSIO", "VerybigGom", "f_mbgo", "ff_xipe", 
+  "SugatorE", "_raspc_", "chigold__", "nong21ss", "muji_gea", 
+  "bie0620", "1atooooz", "Jin_Ham_star", "audi5vide5disc0", "san_nakji", 
+  "time2ReachOut", "Haribokeyring", "immain11101", "HimynameisEeel", "LEVELU5", 
+  "MOMUKNA", "uvuny", "1111_dallaaa", "stinkysoup_", "3m_y_a_m1", 
+  "mekes0h0sure", "mango6_k", "310_646", "kagayakidontfor", "0aecore", 
+  "Star_P_ruit"], 
+
+            "개돌": [
   "yow0n_", "Rooftop_Tokyo_", "ns3519_19", "Leue_ni", "ririo851069", "w4vewalker", "Ryung_Mrms", "Grim_Beenoo", "pureloveghost", "angerisgiift", 
   "B___et4", "1nt3ii", "Ontamaendy", "salmon_GOM", "hamzzangeee", "comu2_Eodzjs", "akwkr99", "KiReXi_1031", "frag0_", "HibbengKim", 
   "rkfhemmmmmd", "mara_machine", "4IllME", "begameganote", "yi11356", "Yhoo_TRPG", "dmltlrwn369", "Mort_x_x", "weekweekgata", "Born_to_d___", 
@@ -156,51 +135,48 @@
   "WI_Jisu66", "ME_D46", "Bingi_Telly", "flowerofwinter_", "madonetwotdree", "geumjatang", "SW2TPOTATOHEART", "0921_Vv", "wnsdud__", "Muska_12", 
   "dusqha", "jrdogwalwal", "nach0_212", "berryRoseK", "mochikun_mo", "joongBD_", "35_o_", "hush_love_u_u", "mizvw_", "left__SS", 
   "Paradox_of_L0VE", "Giyounae", "sotbabmania", "THUNDER_GL0W", "ge_husky", "StayB2ngHomie", "X0_W_", "MY3DzS5IwsRASOp", "n0c0nt3xt0", "tsunemori_ark", 
-  "_20th_century", "angelakanojyo", "ccber7785", "un2_2v", "finnn_oyo"
-],
-            "팔로워확인_유저B": ["twitter_id_3", "common_friend_id_1", "twitter_id_4", "common_friend_id_2"],
-            "팔로워확인_유저C": ["twitter_id_5", "twitter_id_6", "common_friend_id_2", "friend_of_C"]
+  "_20th_century", "angelakanojyo", "ccber7785", "un2_2v", "finnn_oyo"],
+
+            "라떼": ["_mole_1", "podoooo024", "Unknown_B0X", "CS465465", "MyU1s2", "sekailllll", "ekfkawl_R", "in_Spain_woS", "time2ReachOut", "Jm_Dm_G", 
+  "omagkeol92165", "didlgjwjqemfdk", "__72nd", "L_Loo_L____", "topports", "MarkisSola3933", "ID__OVO", "R_after_commm", "Damy0ng", "dkskfktldi", 
+  "dbfudrPrkehldj", "Callenis_d", "10toptree", "E_2two", "ai_aikasa", "sin_meme0", "jellyfull_nano", "whyss_88", "WillBeBald", "gong_ju_mom", 
+  "L_O_MILKYWAY", "Z_chunsam", "tired_1055", "40Nongnolgul", "FlatButt_", "38inging", "SuperMGu_u", "5PANG_", "gaetamamaa", "wosori_kat", 
+  "backtotheffff", "E0N_294", "duiromirugi", "StayB2ngHomie", "Paradox_of_L0VE", "fufu__fo", "_Neverthe1ess_", "1117_189", "hazimalza", "necheesh", 
+  "_Ringgi_Ringgi_", "xm_xmg_x", "AHN_YUL", "wlq_rkrhtlvek_", "_PPP_2_", "niceGARAK", "looctwo1", "Ringgi_Ringgi", "gaegoal01", "BUTitsOKtoLOVE", 
+  "kkddkkddkd", "maejin_d", "BBANG_WANT", "chigold__", "rihodubo", "verygoodsyan", "nnamoooo", "byabs__", "sari_comes_out", "_RosePoems_", 
+  "premproq", "Nebrrruuu", "Jm_Dmg", "newga_bar", "HimynameisEeel", "sh_n_r_yota", "milkkkey_", "Donut__zoa", "mi_mong__", "potato_1cha", 
+  "wnElapfl", "Saevietterrz_00", "kco3954", "postmeridianq", "lugi0311", "SleepsheepN", "rihito_latte", "OveUrmy", "mel_commu", "aiaidndsidsid", 
+  "O_pang_", "ct_comu", "HA__AE", "mekes0h0sure", "OPDawnseeker", "masoch2rry", "Bbunny_HOME", "nugget__good", "THUNDER_GL0W", "Jubi_ban", 
+  "gubuje", "jinjang1133", "Zizi_epeepe", "ssuggudaa", "dovivivivi", "BLYU__", "mandappiness", "eleanorlina", "goals09", "Deliciouss030", 
+  "mysticlemon", "duckk_7777", "zdc1224", "D_JES_0311", "sayhoney22", "BoZaWCGTtAiXysH", "alsxm43", "thegreatkogi", "hinol05", "hanshidayo", 
+  "yurikkokko", "MAESAENG__E", "dhkd0817"
+]
         };
-        // --- 님의 타겟 유저 데이터 끝 ---
 
         document.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const visitorFollowingRaw = urlParams.get('following');
-            const resultContainer = document.getElementById('result-container');
+            const params = new URLSearchParams(window.location.search);
+            const following = params.get('following');
+            const container = document.getElementById('result-container');
+
+            if (!following) {
+                container.innerHTML = "<p class='no-match'>대조할 팔로워 데이터가 없습니다.</p>";
+                return;
+            }
+
+            const visitorSet = new Set(following.split(','));
             let html = "";
 
-            if (!visitorFollowingRaw) {
-                html = "<div class='error-message'>데이터를 찾을 수 없습니다. <br>트위터 팔로잉 목록 페이지에서 북마크릿을 클릭했는지 확인해주세요.</div>";
-            } else {
-                const visitorFollowing = new Set(visitorFollowingRaw.split(',')); // Set으로 변환하여 검색 속도 향상
-                
-                let foundAnyConnection = false;
-
-                for (const [targetName, followers] of Object.entries(targetData)) {
-                    const matches = followers.filter(id => visitorFollowing.has(id));
-                    
-                    if (matches.length > 0) {
-                        foundAnyConnection = true;
-                        html += `<div class="card">
-                            <h3>${targetName}님과 연결된 2차 지인</h3>
-                            <ul class="match-list">`;
-                        matches.forEach(matchId => {
-                            html += `<li>@${matchId}</li>`;
-                        });
-                        html += `</ul></div>`;
-                    } else {
-                        html += `<div class="card">
-                            <h3>${targetName}님과 연결된 2차 지인</h3>
-                            <p class="no-match">겹치는 지인이 없습니다.</p>
-                        </div>`;
-                    }
+            for (const [name, list] of Object.entries(targetData)) {
+                const matches = list.filter(id => visitorSet.has(id));
+                html += `<div class="card"><h3>${name}님과의 공통 지인</h3><ul class="match-list">`;
+                if (matches.length > 0) {
+                    matches.forEach(id => html += `<li>@${id}</li>`);
+                } else {
+                    html += `<li class="no-match">찾은 공통 지인이 없습니다.</li>`;
                 }
-                
-                if (!foundAnyConnection) {
-                    html = "<p class='no-match'>모든 타겟 유저들과 겹치는 지인이 없습니다.</p>" + html; // 전체 결과가 없을 때 메시지 추가
-                }
+                html += `</ul></div>`;
             }
-            resultContainer.innerHTML = html;
+            container.innerHTML = html;
         });
     </script>
 </body>
